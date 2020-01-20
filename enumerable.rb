@@ -22,5 +22,16 @@ module Enumerable
 		selected = []
 		self.my_each { |i| selected << i if yield(i) }
 		selected
+    end
+    
+    def my_all? 
+		boolean = true
+		self.my_each  do |i| 
+			boolean = false unless yield(i) 
+			if boolean == false
+				break
+			end
+		end
+		boolean 
 	end
 end
