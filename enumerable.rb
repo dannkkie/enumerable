@@ -33,5 +33,11 @@ module Enumerable
 			end
 		end
 		boolean 
+    end
+    
+    def my_any? 
+		boolean = false
+		self.my_each {|i| boolean = true if yield(i)}
+		boolean
 	end
 end
