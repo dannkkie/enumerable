@@ -9,6 +9,7 @@ module Enumerable
         self
     end
 
+     #this is the my_each_with_index method
     def my_each_with_index
 		i = 0
 		while i < self.size
@@ -18,12 +19,14 @@ module Enumerable
 		self
     end
     
+     #this is the my_select method
     def my_select
 		selected = []
 		self.my_each { |i| selected << i if yield(i) }
 		selected
     end
     
+     #this is the my_all method
     def my_all? 
 		boolean = true
 		self.my_each  do |i| 
@@ -35,12 +38,14 @@ module Enumerable
 		boolean 
     end
     
+     #this is the my_any method
     def my_any? 
 		boolean = false
 		self.my_each {|i| boolean = true if yield(i)}
 		boolean
     end
     
+     #this is the my_none method
     def my_none?
 		boolean = true
 		self.my_each do|i| 
@@ -52,6 +57,7 @@ module Enumerable
 		boolean
     end
     
+     #this is the my_count method
     def my_count
 		num = 0
 		if block_given?
@@ -62,6 +68,7 @@ module Enumerable
 		num
     end
     
+     #this is the my_map method
     def my_map(&proc)
 		new_array = []
 		if proc
@@ -79,3 +86,7 @@ module Enumerable
 		total
 	end
 end
+
+    def multiply_els(array)
+        array.my_inject(1) {|product, i| product * i}
+    end
