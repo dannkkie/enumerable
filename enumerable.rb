@@ -60,5 +60,22 @@ module Enumerable
 			self.my_each {|i| num += 1}
 		end
 		num
+    end
+    
+    def my_map(&proc)
+		new_array = []
+		if proc
+			self.my_each {|i| new_array << proc.call(i)}
+			new_array
+		else
+			self.my_each {|i| new_array << yield(i)}
+			new_array
+		end
+    end
+    
+    def my_inject(args = nil)
+		total = args.nil? ? self[0] : args
+		self.my_each {|i| total = yield(total, i)}
+		total
 	end
 end
