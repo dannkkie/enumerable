@@ -39,5 +39,16 @@ module Enumerable
 		boolean = false
 		self.my_each {|i| boolean = true if yield(i)}
 		boolean
+    end
+    
+    def my_none?
+		boolean = true
+		self.my_each do|i| 
+			boolean = false if yield(i)
+			if boolean == false
+				break
+			end
+		end
+		boolean
 	end
 end
