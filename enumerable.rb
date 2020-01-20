@@ -50,5 +50,15 @@ module Enumerable
 			end
 		end
 		boolean
+    end
+    
+    def my_count
+		num = 0
+		if block_given?
+			self.my_each  { |i| num += 1 if yield(i) }
+		else
+			self.my_each {|i| num += 1}
+		end
+		num
 	end
 end
