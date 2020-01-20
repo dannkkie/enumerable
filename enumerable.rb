@@ -16,5 +16,11 @@ module Enumerable
 			i+= 1
 		end
 		self
+    end
+    
+    def my_select
+		selected = []
+		self.my_each { |i| selected << i if yield(i) }
+		selected
 	end
 end
