@@ -71,10 +71,8 @@ module Enumerable
     new_array = []
     if proc
       my_each { |i| new_array << proc.call(i) }
-      new_array
     else
       my_each { |i| new_array << yield(i) }
-      new_array
     end
   end
 
