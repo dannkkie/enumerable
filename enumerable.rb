@@ -96,22 +96,42 @@ module Enumerable
   end
 
   # this is the my_map method
-  def my_map(&proc)
+  def my_map(arg = nil)
     return to_enum unless block_given?
 
-    new_array = []
-    if proc
-      my_each { |i| new_array << proc.call(i) }
-    else
-      my_each { |i| new_array << yield(i) }
+    arr = []
+    my_each do |i|
+      arr.push(!arg.nil? ? arg.call(i) : yield(i))
     end
+    arr
   end
 
   # this is the my_inject method
-  def my_inject(args = nil)
-    total = args.nil? ? self[0] : args
-    my_each { |i| total = yield(total, i) }
-    total
+  def my_inject(accumulator = nil, operation = nil, &block)
+    if operation.nil? && block.nil?
+      operation = accumulator
+      accumulator = nil
+    end
+    block = case operation
+            when Symbol
+              ->(acc, value) { acc.send(operation, value) }
+            when nil
+              block
+            else
+              raise ArgumentError, 'the operation provided must be a symbol'
+            end
+    if accumulator.nil?
+      ignore_first = true
+      accumulator = first
+    end
+
+    index = 0
+
+    each do |element|
+      accumulator = block.call(accumulator, element) unless ignore_first && index.zero?
+      index += 1
+    end
+    accumulator
   end
 end
 
