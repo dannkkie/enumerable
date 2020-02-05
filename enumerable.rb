@@ -67,13 +67,19 @@ module Enumerable
   end
 
   # this is the my_none method
-  def my_none?
-    boolean = true
-    my_each do |i|
-      boolean = false if yield(i)
-      break if boolean == false
+  def my_none?(param = nil)
+    if block_given?
+      my_each { |i| return false if yield(i) }
+    elsif param.class == Class
+      my_each { |i| return false if i.class == param }
+    elsif param.class == Regexp
+      my_each { |i| return false if i =~ param }
+    elsif param.nil?
+      my_each { |i| return false if i }
+    else
+      my_each { |i| return false if i == param }
     end
-    boolean
+    true
   end
 
   # this is the my_count method
