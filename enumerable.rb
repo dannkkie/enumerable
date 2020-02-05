@@ -83,14 +83,16 @@ module Enumerable
   end
 
   # this is the my_count method
-  def my_count
-    num = 0
+  def my_count(items = nil)
+    count = 0
     if block_given?
-      my_each { |i| num += 1 if yield(i) }
+      my_each { |i| count += 1 if yield(i) == true }
+    elsif items.nil?
+      my_each { count += 1 }
     else
-      my_each { |_i| num += 1 }
+      my_each { |i| count += 1 if i == items }
     end
-    num
+    count
   end
 
   # this is the my_map method
