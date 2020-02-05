@@ -97,6 +97,8 @@ module Enumerable
 
   # this is the my_map method
   def my_map(&proc)
+    return to_enum unless block_given?
+
     new_array = []
     if proc
       my_each { |i| new_array << proc.call(i) }
