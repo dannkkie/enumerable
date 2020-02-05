@@ -51,10 +51,19 @@ module Enumerable
   end
 
   # this is the my_any method
-  def my_any?
-    boolean = false
-    my_each { |i| boolean = true if yield(i) }
-    boolean
+  def my_any?(param = nil)
+    if block_given?
+      my_each { |i| return true if yield(i) }
+    elsif param.class == Class
+      my_each { |i| return true if i.class == param }
+    elsif param.class == Regexp
+      my_each { |i| return true if i =~ param }
+    elsif param.nil?
+      my_each { |i| return true if i }
+    else
+      my_each { |i| return true if i == param }
+    end
+    false
   end
 
   # this is the my_none method
