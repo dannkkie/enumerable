@@ -51,7 +51,6 @@ module Enumerable
     true
   end
 
-  # this is the my_any method
   # rubocop:disable Metrics/PerceivedComplexity,Metrics/CyclomaticComplexity
   def my_any?(param = nil)
     if block_given?
@@ -116,8 +115,6 @@ module Enumerable
 end
 
 # this is the multiply_els method
-
-# rubocop:enable
 def multiply_els(array)
   array.my_inject(1) { |product, i| product * i }
 end
