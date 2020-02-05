@@ -35,13 +35,19 @@ module Enumerable
   end
 
   # this is the my_all method
-  def my_all?
-    boolean = true
-    my_each do |i|
-      boolean = false unless yield(i)
-      break if boolean == false
+  def my_all?(param = nil)
+    if block_given?
+      my_each { |i| return false unless yield(i) }
+    elsif param.class == Class
+      my_each { |i| return false unless i.class == param }
+    elsif param.class == Regexp
+      my_each { |i| return false unless i =~ param }
+    elsif param.nil?
+      my_each { |i| return false unless i }
+    else
+      my_each { |i| return false unless i == param }
     end
-    boolean
+    true
   end
 
   # this is the my_any method
