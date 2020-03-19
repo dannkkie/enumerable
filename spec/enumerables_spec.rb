@@ -1,61 +1,91 @@
 # frozen_string_literal: true
 
-# spec/enumerables_spec.rb
+# spec/enumerable_spec.rb
 
-require_relative '../enumerable.rb'
+require './enumerable.rb'
 
-RSpec.describe Enumerable do
-  let(:array_1) { [1, 2, 3] }
-  let(:array_2) { [3] }
-  let(:array_3) { [nil, true, 99] }
-  let(:array_4) { [1, 2, 3, 1, 2, 3, 4, 1, 2, 3] }
+describe Enumerable do
+  let (:arr) { [2, 4, 7, 2] }
+  let (:ans) { [] }
 
-  describe '#my_each' do
-    it 'iterates through an array' do
-      expect(array_1.my_each { |x| x }).to eql(array_1)
-      expect(array_1.my_each { |x| x * 2 }).to eql(array_1)
-      expect(array_1.my_each { |x| x * 4 }).to eql(array_1)
+  describe 'my_each' do
+    it 'should steps through array and do block' do
+      arr.my_each { |i| ans << i * 2 }
+      expect(ans).to eq([4, 8, 14, 4])
     end
   end
 
-  describe '#my_each_with_index' do
-    it 'iterates through an array and its index' do
-      expect(array_1.my_each_with_index { |x, y| x + y }).to eql(array_1)
-      expect(array_1.my_each_with_index { |x, y| x * y }).to eql(array_1)
-      expect(array_1.my_each_with_index { |x, y| x - y }).to eql(array_1)
+  describe 'my_each_with_index' do
+    it 'should step through array and return index' do
+      arr.my_each_with_index { |_i, j| ans << j }
+      expect(ans).to eq([0, 1, 2, 3])
     end
   end
 
-  describe '#my_select' do
-    it 'creates a new array based on the conditions in the block' do
-      expect(array_4.select { |x| x == 1 }).to eql([1, 1, 1])
-      expect(array_2.select { |x| x == 1 }).to eql([])
-      expect(array_4.select { |x| x > 3 }).to eql([4])
-      expect(array_3.select { |x| x == true }).to eql([true])
+  describe 'my_select' do
+    it 'returns array containing all elements for which given block returns true' do
+      expect(arr.my_select(&:even?)).to eq([2, 4, 2])
+    end
+    it 'returns a blank array if all false' do
+      expect(arr.my_select { |i| i > 10 }).to eq([])
     end
   end
 
-  describe '#my_all?' do
-    it 'tests whether the given condition is true for every item in the array.' do
-      expect(array_1.my_all? { |x| x == 1 }).to eql(false)
-      expect(array_1.my_all? { |x| x == true }).to eql(false)
-      expect(array_1.my_all? { |x| x > 0 }).to eql(true)
+  describe 'my_all?' do
+    it 'returns true if no elements return false' do
+      expect(arr.my_all? { |i| i < 10 }).to eq(true)
+    end
+    it 'returns false if one or more elements return false' do
+      expect(arr.my_all? { |i| i < 6 }).to eq(false)
     end
   end
 
-  describe '#my_any?' do
-    it 'tests whether the given condition is true for every item in the array.' do
-      expect(array_3.my_any? { |x| x == true }).to eql(true)
-      expect(array_4.my_any? { |x| x == true }).to eql(false)
-      expect(array_4.my_any? { |x| x > 0 }).to eql(true)
+  describe 'my_any?' do
+    it 'returns true if one condition is true' do
+      expect(arr.my_any? { |i| i > 6 }).to eq(true)
+    end
+    it 'returns false if all conditions are false' do
+      expect(arr.my_any? { |i| i % 10 == 0 }).to eq(false)
     end
   end
 
-  describe '#my_none?' do
-    it 'tests whether the given condition is true for every item in the array.' do
-      expect(array_3.my_none? { |x| x == true }).to eql(false)
-      expect(array_4.my_none? { |x| x == true }).to eql(true)
-      expect(array_4.my_none? { |x| x > 0 }).to eql(false)
+  describe 'my_none?' do
+    it 'returns true if all conditions are false' do
+      expect(arr.my_none? { |i| i % 10 == 0 }).to eq(true)
+    end
+    it 'returns false if one condition is true' do
+      expect(arr.my_none? { |i| i > 6 }).to eq(false)
+    end
+  end
+
+  describe 'my_count' do
+    it 'returns the number of items in an array if no argument is passed' do
+      expect(arr.my_count).to eq(4)
+    end
+    it 'returns the number of items equal to passed argument' do
+      expect(arr.my_count(2)).to eq(2)
+      expect(arr.my_count(4)).to eq(1)
+    end
+    it 'counts number of true elements if block is given' do
+      expect(arr.my_count { |i| i < 6 }).to eq(3)
+    end
+  end
+
+  describe 'my_map' do
+    it 'returns new array with the results from running block once' do
+      expect(arr.my_map { |i| i**2 }).to eq([4, 16, 49, 4])
+    end
+    it 'returns enumerator if no block is given' do
+      expect(arr.map { 'cat' }).to eq(%w[cat cat cat cat])
+    end
+  end
+
+  describe 'my_inject' do
+    it 'uses a block and returns memo' do
+      expect(arr.my_inject { |sum, i| sum + i }).to eq(15)
+    end
+    it 'multiplies elements from array' do
+      expect(arr.my_inject(1) { |memo, n| memo * n }).to eq(112)
     end
   end
 end
