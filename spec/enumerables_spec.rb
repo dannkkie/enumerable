@@ -5,8 +5,8 @@
 require './enumerable.rb'
 
 describe Enumerable do
-  let (:arr) { [2, 4, 7, 2] }
-  let (:ans) { [] }
+  let(:arr) { [2, 4, 7, 2] }
+  let(:ans) { [] }
 
   describe 'my_each' do
     it 'should steps through array and do block' do
@@ -45,13 +45,13 @@ describe Enumerable do
       expect(arr.my_any? { |i| i > 6 }).to eq(true)
     end
     it 'returns false if all conditions are false' do
-      expect(arr.my_any? { |i| i % 10 == 0 }).to eq(false)
+      expect(arr.my_any? { |i| (i % 10).zero? }).to eq(false)
     end
   end
 
   describe 'my_none?' do
     it 'returns true if all conditions are false' do
-      expect(arr.my_none? { |i| i % 10 == 0 }).to eq(true)
+      expect(arr.my_none? { |i| (i % 10).zero? }).to eq(true)
     end
     it 'returns false if one condition is true' do
       expect(arr.my_none? { |i| i > 6 }).to eq(false)
